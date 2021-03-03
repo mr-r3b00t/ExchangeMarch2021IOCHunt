@@ -56,5 +56,11 @@ write-host $line -ForegroundColor DarkYellow
 
 }
 
+#look for odd aspx files
+Get-ChildItem -Path C:\inetpub\wwwroot\aspnet_client\ -Recurse -Filter "*.aspx"
+
+# look for odd aspx files (deafult names are "errorFE.aspx", "ExpiredPassword.aspx","frowny.aspex","logoff.aspx","logon.aspx","OutlookCN.aspx"."RedirSuiteServiceProxy.aspx",signout.aspx"
+Get-ChildItem -Path "C:\Program Files\Microsoft\Exchange Server\V15\FrontEnd\HttpProxy\owa\auth\" -Recurse -Filter "*.aspx*"
+
 
 #if anytihng is found then investigate - this is not a fully developed script - use at own risk. check the mS docs.
