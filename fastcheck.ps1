@@ -39,4 +39,13 @@ Select-String -Path "$env:PROGRAMFILES\Microsoft\Exchange Server\V15\Logging\ECP
 #read all the IIS logs looking for POST requests to /owa/auth/Current/themes/resources/
 $parse1 = Select-String -Path "C:\inetpub\logs\LogFiles\W3SVC1\*.log" -Pattern 'POST /owa/auth/Current/themes/resources/'
 
+foreach($line in $parse1){
+
+write-host "Might want to investigate this" -ForegroundColor DarkRed
+write-host $line -ForegroundColor DarkYellow
+
+
+}
+
+
 #if anytihng is found then investigate - this is not a fully developed script - use at own risk. check the mS docs.
