@@ -56,6 +56,9 @@ write-host $line -ForegroundColor DarkYellow
 
 }
 
+#IOC check from mS blog
+Import-Csv -Path (Get-ChildItem -Recurse -Path "$env:PROGRAMFILES\Microsoft\Exchange Server\V15\Logging\HttpProxy" -Filter '*.log').FullName | Where-Object {  $_.AuthenticatedUser -eq '' -and $_.AnchorMailbox -like 'ServerInfo~*/*' } | select DateTime, AnchorMailbox
+
 #look for odd aspx files
 Get-ChildItem -Path C:\inetpub\wwwroot\aspnet_client\ -Recurse -Filter "*.aspx"
 
