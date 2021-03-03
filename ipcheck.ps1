@@ -1,8 +1,7 @@
 #Hunt for bad ips in IIS logs
 # mRr3b00t 
 # crappy detection script made in a rush 03/03/2021
-# version 0.2
-# added in IP from reddit post: https://www.reddit.com/r/msp/comments/lwmo5c/mass_exploitation_of_onprem_exchange_servers/
+# version 0.1
 
 
 #Requires -RunAsAdministrator
@@ -25,7 +24,11 @@ $readfile = Get-Content -Path $file
 foreach($badIP in $badips){
 write-host "Hunting for string $BadIP" -ForegroundColor Cyan
 
-$readfile -match $badIP
+$found = $readfile -match $badIP
+if($found){write-host $found -ForegroundColor Red
+
+Read-Host -Prompt "YOu might want to investigate this event! Press enter to continue..."
+}
 
 }
 
