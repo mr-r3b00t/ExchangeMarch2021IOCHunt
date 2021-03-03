@@ -3,6 +3,7 @@
 # uses default paths
 # tested on a clean exchange 2016 server
 # run with admin rights as you need them to get to the paths 
+# version 0.3
 
 #check this folder for asp files C:\inetpub\wwwroot\aspnet_client\system_web
 
@@ -35,5 +36,7 @@ Get-EventLog -LogName Application -Source "MSExchange Unified Messaging" -EntryT
 #this should be blank
 Select-String -Path "$env:PROGRAMFILES\Microsoft\Exchange Server\V15\Logging\ECP\Server\*.log" -Pattern 'Set-.+VirtualDirectory'
 
-#if anytihng is found then investigate - this is not a fully developed script - use at own risk. check the mS docs.
+#read all the IIS logs looking for POST requests to /owa/auth/Current/themes/resources/
+$parse1 = Select-String -Path "C:\inetpub\logs\LogFiles\W3SVC1\*.log" -Pattern 'POST /owa/auth/Current/themes/resources/'
 
+#if anytihng is found then investigate - this is not a fully developed script - use at own risk. check the mS docs.
