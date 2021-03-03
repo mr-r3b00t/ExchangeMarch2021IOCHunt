@@ -57,7 +57,27 @@ write-host $line -ForegroundColor DarkYellow
 }
 
 #IOC check from mS blog CVE-2021-26855
-Import-Csv -Path (Get-ChildItem -Recurse -Path "$env:PROGRAMFILES\Microsoft\Exchange Server\V15\Logging\HttpProxy" -Filter '*.log').FullName | Where-Object {  $_.AuthenticatedUser -eq '' -and $_.AnchorMailbox -like 'ServerInfo~*/*' } | select DateTime, AnchorMailbox
+#Import-Csv -Path (Get-ChildItem -Recurse -Path "$env:PROGRAMFILES\Microsoft\Exchange Server\V15\Logging\HttpProxy" -Filter '*.log').FullName | Where-Object {  $_.AuthenticatedUser -eq '' -and $_.AnchorMailbox -like 'ServerInfo~*/*' } | select DateTime, AnchorMailbox
+# this totally broke on a live exchange box so i re-wrote my own detection method (tread carefully)
+$files = Get-ChildItem -Recurse "$env:PROGRAMFILES\Microsoft\Exchange Server\V15\Logging\HttpProxy\*.log"
+
+foreach($file in $files)
+{
+#read the file contents into memory
+write-host "Reading files"
+write-host $file.Name
+$readfile = Get-Content -Path $file
+
+
+if($readfile -like "*ServerInfo~*/*"){
+
+write-host "SUSPICIOUS LOG DETECTED" -foregroundcolour red
+write-host "investigate fruther look for if the AuthenticatedUser is '' / NULL and if so its a sign of attempted exploit"
+write-host $readfile
+read-host -Prompt "press enter to continue"
+}
+
+}
 
 #look for odd aspx files
 Get-ChildItem -Path C:\inetpub\wwwroot\aspnet_client\ -Recurse -Filter "*.aspx"
