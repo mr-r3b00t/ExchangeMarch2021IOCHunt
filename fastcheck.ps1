@@ -3,7 +3,7 @@
 # uses default paths
 # tested on a clean exchange 2016 server
 # run with admin rights as you need them to get to the paths 
-# version 0.5
+# version 0.6
 
 #check this folder for asp files C:\inetpub\wwwroot\aspnet_client\system_web
 
@@ -57,6 +57,7 @@ write-host $line -ForegroundColor DarkYellow
 }
 
 #IOC check from mS blog CVE-2021-26855
+Write-host "Checking for CVE-2021-26855 in the HttpProxy logs" -ForegroundColor Cyan
 #Import-Csv -Path (Get-ChildItem -Recurse -Path "$env:PROGRAMFILES\Microsoft\Exchange Server\V15\Logging\HttpProxy" -Filter '*.log').FullName | Where-Object {  $_.AuthenticatedUser -eq '' -and $_.AnchorMailbox -like 'ServerInfo~*/*' } | select DateTime, AnchorMailbox
 # this totally broke on a live exchange box so i re-wrote my own detection method (tread carefully)
 $files = Get-ChildItem -Recurse "$env:PROGRAMFILES\Microsoft\Exchange Server\V15\Logging\HttpProxy\*.log"
@@ -69,29 +70,25 @@ write-host $file.Name  -foregroundcolor Yellow
 
 $readfile = Get-Content -Path $file
 
-
 if($readfile -like "*ServerInfo~*/*"){
 write-host $file.FullName  -foregroundcolor red
 write-host "SUSPICIOUS LOG DETECTED" -foregroundcolor red
 write-host "investigate further look for if the AuthenticatedUser is '' / NULL and if so its a sign of attempted exploit"
-read-host -Prompt "press enter to continue"
+
 $suspect = $readfile | Select-String -Pattern "ServerInfo"
-foreach($line in $readfile){
 
-
-        if($line -like "*ServerInfo~*/*"){
-
-        write-host $line
-        
-     
-
-        read-host -Prompt "press enter to continue"
-        }
+        #yoinked this from microsoft (thanks MS luv mRr3b00t)
+      
+         $fileResults = @(Import-Csv -Path $file.FullName -ErrorAction SilentlyContinue | Where-Object AnchorMailbox -Like 'ServerInfo~*/*' | Select-Object -Property DateTime, RequestId, ClientIPAddress, UrlHost, UrlStem, RoutingHint, UserAgent, AnchorMailbox, HttpStatus)
+                            ForEach($item in $fileResults){
+                            write-host "THANKS MICROSOFT ##########################" -ForegroundColor Gray
+                                write-host $item -ForegroundColor DarkGreen
+                                read-host -Prompt "press enter to continue"
+                            }
+                             
 
 
     }
-read-host -Prompt "press enter to continue"
-}
 
 }
 
