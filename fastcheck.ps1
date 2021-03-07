@@ -3,7 +3,7 @@
 # uses default paths
 # tested on a clean exchange 2016 server
 # run with admin rights as you need them to get to the paths 
-# version 0.3
+# version 0.4
 
 #check this folder for asp files C:\inetpub\wwwroot\aspnet_client\system_web
 
@@ -64,16 +64,35 @@ $files = Get-ChildItem -Recurse "$env:PROGRAMFILES\Microsoft\Exchange Server\V15
 foreach($file in $files)
 {
 #read the file contents into memory
-write-host "Reading files"
-write-host $file.Name
+write-host "Reading files"   -foregroundcolor Blue
+write-host $file.Name  -foregroundcolor Yellow
+
 $readfile = Get-Content -Path $file
 
 
 if($readfile -like "*ServerInfo~*/*"){
+write-host $file.FullName  -foregroundcolor red
+write-host "SUSPICIOUS LOG DETECTED" -foregroundcolor red
+write-host "investigate further look for if the AuthenticatedUser is '' / NULL and if so its a sign of attempted exploit"
+read-host -Prompt "press enter to continue"
+$suspect = $readfile | Select-String -Pattern "ServerInfo"
+foreach($line in $readfile){
 
-write-host "SUSPICIOUS LOG DETECTED" -foregroundcolour red
-write-host "investigate fruther look for if the AuthenticatedUser is '' / NULL and if so its a sign of attempted exploit"
-write-host $readfile
+
+        if($line -like "*ServerInfo~*/*"){
+
+        #write-host $line
+        $line |ConvertTo-Csv
+        write-host $csv
+      foreach($object in $csv){
+      write-host $object
+      }
+
+        read-host -Prompt "press enter to continue"
+        }
+
+
+    }
 read-host -Prompt "press enter to continue"
 }
 
