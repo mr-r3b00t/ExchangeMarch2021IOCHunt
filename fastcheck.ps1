@@ -3,7 +3,7 @@
 # uses default paths
 # tested on a clean exchange 2016 server
 # run with admin rights as you need them to get to the paths 
-# version 0.4
+# version 0.5
 
 #check this folder for asp files C:\inetpub\wwwroot\aspnet_client\system_web
 
@@ -81,12 +81,9 @@ foreach($line in $readfile){
 
         if($line -like "*ServerInfo~*/*"){
 
-        #write-host $line
-        $line |ConvertTo-Csv
-        write-host $csv
-      foreach($object in $csv){
-      write-host $object
-      }
+        write-host $line
+        
+     
 
         read-host -Prompt "press enter to continue"
         }
