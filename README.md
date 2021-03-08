@@ -2,7 +2,7 @@
 Really fast knock up use at own risk etc.
 
 Please read the guidance here: This is not to replace the MS scripts etc. it's meannt as a more detailed view on some of the areas of investiation.
-
+https://www.pwndefend.com/2021/03/07/checking-for-hafnium-or-other-groups-impact-from-exchange-abuse/
 
 08/03/2021 13:59 GMT
 Ther's a bug in fastcheck.ps1 the bad IP matching where it's matching a some log data that isn't an IP address. I'm just working on fixing that.
