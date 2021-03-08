@@ -172,6 +172,7 @@ foreach($file in $files)
             #read the file contents into memory
             write-host "Reading files"
             write-host $file.Name
+             write-host $file.FullName
             $readfile = Get-Content -Path $file
 
 
@@ -310,10 +311,3 @@ write-host "if anytihng is found then investigate - this is not a fully develope
 write-host "###########################################################" -ForegroundColor Gray
 
 write-host "IOC Hunting development script made by mRr3b00t. Fight the bad pews, save the world! Hax4Good" -ForegroundColor Red
-
-
-
-
-
-
-
