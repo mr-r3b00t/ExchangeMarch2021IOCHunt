@@ -185,7 +185,7 @@ foreach($file in $files)
                             {
                             write-host $found -ForegroundColor Red
                             write-host "########WARNING##############" -ForegroundColor Red
-                            write-host "whilst hunting for $BadIp in $file we found a match." -ForegroundColor Grey
+                            write-host "whilst hunting for $BadIp in $file we found a match." -ForegroundColor Gray
 
                             if($readfile | Select-String -Pattern $badIP -SimpleMatch){Read-Host -Prompt "YOu might want to investigate this event! Press enter to continue..."}
 
