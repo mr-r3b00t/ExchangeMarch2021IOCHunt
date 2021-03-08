@@ -41,16 +41,16 @@ read-host "Press ENTER to Continue"
 Write-host "############Checking for suspect events in the Windows event logs#############" -ForegroundColor Cyan
 #there should be no events
 Write-host "Checking IIS-W3SVC-WP event logs" -ForegroundColor Cyan
-Get-EventLog -LogName Application -Source IIS-W3SVC-WP -InstanceId 2303
+Get-EventLog -LogName Application -Source IIS-W3SVC-WP -InstanceId 2303 -ErrorAction SilentlyContinue
 Write-host "Checking IIS-APPHOSTSVC event logs" -ForegroundColor Cyan
-Get-EventLog -LogName Application -Source IIS-APPHOSTSVC -InstanceId 9009
+Get-EventLog -LogName Application -Source IIS-APPHOSTSVC -InstanceId 9009 -ErrorAction SilentlyContinue
 
 
 #CHECK UNIFIED MESSAGING LOGS
 
 #there should be no events
 Write-host "Checking Unified Message event logs"  -ForegroundColor Cyan
-Get-EventLog -LogName Application -Source "MSExchange Unified Messaging" -EntryType Error | Where-Object { $_.Message -like "*System.InvalidCastException*" }
+Get-EventLog -LogName Application -Source "MSExchange Unified Messaging" -EntryType Error -ErrorAction SilentlyContinue | Where-Object { $_.Message -like "*System.InvalidCastException*" } 
 
 ##############################CHECK WINDOWS EVENT LOGS END ###############################
 
@@ -180,7 +180,15 @@ foreach($file in $files)
                             write-host "Hunting for string $BadIP" -ForegroundColor Cyan
 
                             $found = $readfile -match $badIP
-                            if($found){write-host $found -ForegroundColor Red
+                            if($found)
+                            
+                            {
+                            
+                            #write-host $found -ForegroundColor Red
+                            write-host "########WARNING##############" -ForegroundColor Red
+                            write-host "whilst hunting for $BadIp in $file.FullName we found a match" -ForegroundColor Cyan
+
+                            $readfile | Select-String -Pattern $badIP -SimpleMatch
 
                             Read-Host -Prompt "YOu might want to investigate this event! Press enter to continue..."
                             }
