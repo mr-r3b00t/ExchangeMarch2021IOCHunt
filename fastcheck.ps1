@@ -4,7 +4,7 @@
 # tested on a clean exchange 2016 server
 # run with admin rights as you need them to get to the paths 
 
-#check this folder for asp files C:\inetpub\wwwroot\aspnet_client\system_web
+#check this folder for asp files \inetpub\wwwroot\aspnet_client\system_web
 
 #using SHA256 for file hash checking
 
@@ -179,18 +179,17 @@ foreach($file in $files)
                             foreach($badIP in $badips){
                             write-host "Hunting for string $BadIP" -ForegroundColor Cyan
 
-                            $found = $readfile -match $badIP
+                            $found = $readfile -cmatch $badIP
+
                             if($found)
-                            
                             {
-                            
-                            #write-host $found -ForegroundColor Red
+                            write-host $found -ForegroundColor Red
                             write-host "########WARNING##############" -ForegroundColor Red
-                            write-host "whilst hunting for $BadIp in $file.FullName we found a match" -ForegroundColor Cyan
+                            write-host "whilst hunting for $BadIp in $file we found a match." -ForegroundColor 
 
-                            $readfile | Select-String -Pattern $badIP -SimpleMatch
+                            if($readfile | Select-String -Pattern $badIP -SimpleMatch){Read-Host -Prompt "YOu might want to investigate this event! Press enter to continue..."}
 
-                            Read-Host -Prompt "YOu might want to investigate this event! Press enter to continue..."
+                            Read-Host -Prompt "Review this - it's a bit buggy! Press enter to continue..."
                             }
 
             }
@@ -295,6 +294,8 @@ write-host $line -ForegroundColor DarkYellow
 $oabpath = $exchangepath + "Logging\OABGeneratorLog\*.log"
 $oabpath
 Write-host "Checking OABGenerator logs" -ForegroundColor Cyan
+
+#findstr /snip /c:"192.81.208.169" C:\inetpub\logs\LogFiles\W3SVC1\*.log
 findstr /snip /c:"Download failed and temporary file" $oabpath
 
 
