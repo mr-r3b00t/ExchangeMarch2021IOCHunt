@@ -185,7 +185,7 @@ foreach($file in $files)
                             {
                             write-host $found -ForegroundColor Red
                             write-host "########WARNING##############" -ForegroundColor Red
-                            write-host "whilst hunting for $BadIp in $file we found a match." -ForegroundColor 
+                            write-host "whilst hunting for $BadIp in $file we found a match." -ForegroundColor Grey
 
                             if($readfile | Select-String -Pattern $badIP -SimpleMatch){Read-Host -Prompt "YOu might want to investigate this event! Press enter to continue..."}
 
@@ -317,6 +317,6 @@ Select-String -Path $ecppath -Pattern 'Set-.+VirtualDirectory'
 ######################################################
 
 write-host "if anytihng is found then investigate - this is not a fully developed script - use at own risk. check the MS docs." -ForegroundColor Red
-write-host "###########################################################" -ForegroundColor Gray
+write-host "###########################################################" -ForegroundColor Red
 
 write-host "IOC Hunting development script made by mRr3b00t. Fight the bad pews, save the world! Hax4Good" -ForegroundColor Red
