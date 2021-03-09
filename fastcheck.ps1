@@ -115,6 +115,9 @@ $suspect = $readfile | Select-String -Pattern "ServerInfo"
 ######################################
 # CHECK OAB LOGS
 ######################################
+########REMOTE CODE EXECUTION ##################
+# THE RCE IS IN THE Set-OabVirtualDirectory.ExternalUrl cmdlet
+############# IF YOU HAVE HAD RCE THIS WILL HAVE BEEN ABUSED ###############
 
 write-host "########################################################"
 Write-host "Checking OABGenerator logs" -ForegroundColor Cyan
@@ -304,6 +307,8 @@ Write-host "Checking for Set-VirtualDirectory indicators"
 $ecppath = $exchangepath + "Logging\ECP\Server\*.log"
 $ecppath
 
+
+##################THIS IS THE RCE ###################################
 Select-String -Path $ecppath -Pattern 'Set-.+VirtualDirectory'
 
 ######################################################
